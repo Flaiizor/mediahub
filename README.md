@@ -2,12 +2,12 @@
 
 MediaHub is a web application to track and manage media you've experienced or plan to experience — including movies, TV shows, games, and books.
 
-## 📁 Structure
+## Structure
 
 - `backend/`: Spring Boot API with MySQL database
 - `frontend/`: (To be added) React frontend
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 - Docker

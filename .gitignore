@@ -31,3 +31,12 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Treat all text files with LF endings by default
+* text=auto
+
+# Specific overrides
+*.sh text eol=lf
+*.cmd text eol=crlf
+*.bat text eol=crlf
+

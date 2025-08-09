@@ -1,10 +1,13 @@
-function App() {
+import React from "react";
+import MediaList from "./components/MediaList";
+
+const App: React.FC = () => {
   return (
     <div>
       <h1>MediaHub</h1>
-      <p>Welcome to the frontend!</p>
+      <MediaList />
     </div>
   );
-}
+};
 
 export default App;

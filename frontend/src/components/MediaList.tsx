@@ -1,12 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import type { MediaItem, MediaType, ExperienceStatus } from "../types";
 import { mediaTypes, experienceStatuses } from "../types";
-import { mockMediaItems } from "../mockData";
+import { getAllMedia } from "../api/mediaItemAPI";
+import MediaForm from "./MediaForm";
 
 const MediaList: React.FC = () => {
-  const [mediaItems] = useState<MediaItem[]>(mockMediaItems);
+  const [mediaItems, setMediaItems] = useState<MediaItem[]>([]);
   const [filterType, setFilterType] = useState<MediaType | "">("");
   const [filterStatus, setFilterStatus] = useState<ExperienceStatus | "">("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    getAllMedia()
+      .then(setMediaItems)
+      .catch(() => setError("Failed to load media items"))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const handleAdd = (newItem: MediaItem) => {
+    setMediaItems((prev) => [...prev, newItem]);
+  };
 
   const filteredItems = mediaItems.filter((item) => {
     return (
@@ -15,11 +29,15 @@ const MediaList: React.FC = () => {
     );
   });
 
+  if (loading) return <p>Loading media items...</p>;
+  if (error) return <p style={{ color: "red" }}>{error}</p>;
+
   return (
     <div>
       <h2>Media List</h2>
 
-      {/* Filter controls */}
+      <MediaForm onAdd={handleAdd} />
+
       <div style={{ marginBottom: "1rem" }}>
         <label>
           Type:{" "}
@@ -54,7 +72,6 @@ const MediaList: React.FC = () => {
         </label>
       </div>
 
-      {/* Filtered list */}
       <ul>
         {filteredItems.length === 0 ? (
           <li>No items match your filters.</li>

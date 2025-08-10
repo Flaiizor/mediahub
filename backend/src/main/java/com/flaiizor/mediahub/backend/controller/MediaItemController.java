@@ -59,6 +59,40 @@ public class MediaItemController {
         return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 
+    @GetMapping("/filter")
+    public ResponseEntity<List<MediaItemResponse>> filterMediaItems(
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String type,
+            @RequestParam(required = false) String genre,
+            @RequestParam(required = false) String creator,
+            @RequestParam(required = false) Integer rating,
+            @RequestParam(required = false) String status) {
+
+        try {
+            MediaType mediaType = null;
+            if (type != null && !type.trim().isEmpty()) {
+                mediaType = MediaType.valueOf(type.toUpperCase());
+            }
+
+            ExperienceStatus experienceStatus = null;
+            if (status != null && !status.trim().isEmpty()) {
+                experienceStatus = ExperienceStatus.valueOf(status.toUpperCase());
+            }
+
+            List<MediaItemResponse> items = mediaItemService.filterMediaItems(
+                            title, mediaType, genre, creator, rating, experienceStatus)
+                    .stream()
+                    .map(mediaItemMapper::toDto)
+                    .toList();
+
+            return ResponseEntity.ok(items);
+
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    /*
     @GetMapping("/type/{type}")
     public ResponseEntity<List<MediaItemResponse>> getByType(@PathVariable String type) {
         try {
@@ -85,21 +119,11 @@ public class MediaItemController {
         }
     }
 
-    @GetMapping("/filter")
-    public ResponseEntity<List<MediaItemResponse>> getByTypeAndStatus(
-            @RequestParam String type,
-            @RequestParam String status) {
-        try {
-            MediaType mediaType = MediaType.valueOf(type.toUpperCase());
-            ExperienceStatus experienceStatus = ExperienceStatus.valueOf(status.toUpperCase());
-            List<MediaItemResponse> items = mediaItemService.getMediaItemsByTypeAndStatus(mediaType, experienceStatus)
-                    .stream()
-                    .map(mediaItemMapper::toDto)
-                    .toList();
-            return ResponseEntity.ok(items);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
-        }
+    @GetMapping("/rating/{rating}")
+    public List<MediaItemResponse> getByRating(@PathVariable int rating) {
+        return mediaItemService.getMediaItemsByRating(rating).stream()
+                .map(mediaItemMapper::toDto)
+                .toList();
     }
 
     @GetMapping("/search")
@@ -120,4 +144,6 @@ public class MediaItemController {
     public ResponseEntity<Boolean> existsByTitle(@RequestParam String title) {
         return ResponseEntity.ok(mediaItemService.existsByTitle(title));
     }
+
+     */
 }

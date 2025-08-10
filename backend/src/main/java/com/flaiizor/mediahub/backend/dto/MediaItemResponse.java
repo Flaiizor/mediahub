@@ -15,5 +15,6 @@ public class MediaItemResponse {
     private Integer releaseYear;
     private String creator;
     private ExperienceStatus status;
+    private int rating;
     private String review;
 }

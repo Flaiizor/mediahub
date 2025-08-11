@@ -25,13 +25,4 @@ public interface MediaItemRepository extends JpaRepository<MediaItem, Long> {
                                      @Param("creator") String creator,
                                      @Param("rating") Integer rating,
                                      @Param("status") ExperienceStatus status);
-
-    /*
-    List<MediaItem> findByStatus(ExperienceStatus status);
-    List<MediaItem> findByRating(int rating);
-    List<MediaItem> findByTypeAndStatus(MediaType type, ExperienceStatus status);
-    List<MediaItem> findByCreatorContainingIgnoreCase(String creator);
-    List<MediaItem> findByType(MediaType type);
-    List<MediaItem> findByTitleContainingIgnoreCase(String keyword);
-    */
 }

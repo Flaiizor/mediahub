@@ -9,6 +9,7 @@ export const mockMediaItems: MediaItem[] = [
     releaseYear: 2018,
     creator: "Nomada Studio",
     status: "IN_PROGRESS",
+    rating: 10,
     review: "Beautiful, atmospheric, short. Very very good!"
   },
   {
@@ -19,6 +20,7 @@ export const mockMediaItems: MediaItem[] = [
     releaseYear: 1999,
     creator: "The Wachowskis",
     status: "COMPLETED",
+    rating: 8,
     review: "Classic cyberpunk action with deep philosophy."
   },
   {
@@ -29,6 +31,7 @@ export const mockMediaItems: MediaItem[] = [
     releaseYear: 2008,
     creator: "Vince Gilligan",
     status: "TO_EXPERIENCE",
+    rating: 5,
     review: ""
   }
 ];

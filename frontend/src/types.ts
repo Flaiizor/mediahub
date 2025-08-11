@@ -2,11 +2,12 @@ export interface MediaItem {
   id: number;
   title: string;
   type: MediaType;
-  genre: string;
-  releaseYear: number;
-  creator: string;
+  genre: string | undefined;
+  releaseYear: number | undefined;
+  creator: string | undefined;
   status: ExperienceStatus;
-  review: string;
+  rating: number | undefined;
+  review: string | undefined;
 }
 
 export const mediaTypes = ["MOVIE", "SHOW", "GAME", "BOOK"] as const;

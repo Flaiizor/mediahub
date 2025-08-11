@@ -1,13 +1,29 @@
-import React from "react";
-import MediaList from "./components/MediaList";
+import React, { useState } from "react";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import { AnimatePresence } from "framer-motion";
+import Home from "./pages/Home";
+import NavBar from "./components/NavBar";
+import AddMediaModal from "./components/AddMediaModal";
 
-const App: React.FC = () => {
-  return (
-    <div>
-      <h1>MediaHub</h1>
-      <MediaList />
-    </div>
-  );
-};
+function AnimatedRoutes() {
+    const location = useLocation();
+    return (
+        <AnimatePresence mode="wait">
+            <Routes location={location} key={location.pathname}>
+                <Route path="/" element={<Home />} />
+            </Routes>
+        </AnimatePresence>
+    );
+}
 
-export default App;
+export default function App() {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    return (
+        <Router>
+            <NavBar onAddClick={() => setIsModalOpen(true)} />
+            <AnimatedRoutes />
+            <AddMediaModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+        </Router>
+    );
+}

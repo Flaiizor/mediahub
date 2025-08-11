@@ -1,42 +1,96 @@
+############################
+# Backend (Spring Boot / Maven)
+############################
 HELP.md
+
+# Maven build output
+backend/target/
 target/
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
+# Build / cache files
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
 
-### IntelliJ IDEA ###
-.idea
+############################
+# Frontend (Node.js / Vite)
+############################
+# Dependency directories
+frontend/node_modules/
+
+# Production build output
+frontend/dist/
+frontend/dist-ssr/
+frontend/build/
+
+# Environment files
+frontend/.env
+frontend/.env.local
+frontend/.env.*.local
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+############################
+# Docker
+############################
+# Local Docker files and contexts
+docker-compose.override.yml
+.docker/
+.dockerignore
+# Prevent committing intermediate build artifacts
+frontend/node/
+backend/target/
+**/*.jar
+**/*.war
+
+############################
+# IDE / Editor ignores
+############################
+# IntelliJ / JetBrains
+.idea/
 *.iws
 *.iml
 *.ipr
 
-### NetBeans ###
+# Eclipse / STS
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings/
+.springBeans
+.sts4-cache
+
+# NetBeans
 /nbproject/private/
 /nbbuild/
 /dist/
 /nbdist/
 /.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
 
-### VS Code ###
+# VS Code
 .vscode/
+!.vscode/extensions.json
 
-# Treat all text files with LF endings by default
-* text=auto
+############################
+# OS-specific
+############################
+.DS_Store
+Thumbs.db
 
-# Specific overrides
-*.sh text eol=lf
-*.cmd text eol=crlf
-*.bat text eol=crlf
-
+############################
+# Misc
+############################
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

@@ -2,7 +2,13 @@ import React, { useEffect, useState } from "react";
 import { filterMediaItems, updateMediaItem, deleteMediaItem } from "../api/mediaItemAPI";
 import type { MediaItem, ExperienceStatus, MediaType } from "../types";
 
-export default function CurrentMedia() {
+interface MediaListProps {
+  status: ExperienceStatus;
+  title: string;
+  emptyMessage?: string;
+}
+
+export default function MediaList({ status, title, emptyMessage }: MediaListProps) {
   const [mediaItems, setMediaItems] = useState<MediaItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -14,14 +20,14 @@ export default function CurrentMedia() {
     genre: "",
     creator: "",
     rating: "",
-    status: "IN_PROGRESS",
+    status: status,
   });
 
   const currentYear = new Date().getFullYear();
 
   // Fetch filtered items on mount and when filter is applied
   const fetchFiltered = async (
-    filters: { status?: "TO_EXPERIENCE" | "IN_PROGRESS" | "COMPLETED" } = { status: "IN_PROGRESS" }
+    filters: { status?: ExperienceStatus } = { status }
   ) => {
     setLoading(true);
     setError(null);
@@ -37,7 +43,8 @@ export default function CurrentMedia() {
 
   useEffect(() => {
     fetchFiltered();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status]);
 
   const handleEditClick = (item: MediaItem) => {
     setEditingId(item.id);
@@ -116,17 +123,17 @@ export default function CurrentMedia() {
     if (filterFields.genre.trim()) filters.genre = filterFields.genre.trim();
     if (filterFields.creator.trim()) filters.creator = filterFields.creator.trim();
     if (filterFields.rating) filters.rating = Number(filterFields.rating);
-    if (filterFields.status) filters.status = filterFields.status;
+    filters.status = filterFields.status;
     fetchFiltered(filters);
   };
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
-  if (mediaItems.length === 0) return <div>No media in progress.</div>;
+  if (mediaItems.length === 0) return <div>{emptyMessage || "No media to show."}</div>;
 
   return (
     <div>
-      <h2>Current Media</h2>
+      <h2>{title}</h2>
       <form onSubmit={handleFilter} style={{ marginBottom: "1rem", display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
         <input
           name="title"
@@ -175,7 +182,6 @@ export default function CurrentMedia() {
           value={filterFields.status}
           onChange={handleFilterChange}
         >
-          <option value="">All Statuses</option>
           <option value="TO_EXPERIENCE">To Experience</option>
           <option value="IN_PROGRESS">In Progress</option>
           <option value="COMPLETED">Completed</option>

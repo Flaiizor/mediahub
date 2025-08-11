@@ -1,4 +1,3 @@
-// src/components/AddMediaModal.tsx
 import React, { useState } from "react";
 import { createMediaItem } from "../api/mediaItemAPI"; 
 import type { MediaType, ExperienceStatus, MediaItem } from "../types";
@@ -6,9 +5,10 @@ import type { MediaType, ExperienceStatus, MediaItem } from "../types";
 interface AddMediaModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onMediaAdded?: () => void;
 }
 
-export default function AddMediaModal({ isOpen, onClose }: AddMediaModalProps) {
+export default function AddMediaModal({ isOpen, onClose, onMediaAdded }: AddMediaModalProps) {
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState(""); 
   const [type, setType] = useState<MediaType>("BOOK");
@@ -28,7 +28,6 @@ export default function AddMediaModal({ isOpen, onClose }: AddMediaModalProps) {
     e.preventDefault();
     setError(null);
 
-    // Validation
     if (!title.trim()) {
       setError("Title is required.");
       return;
@@ -60,6 +59,7 @@ export default function AddMediaModal({ isOpen, onClose }: AddMediaModalProps) {
         review,
       };
       await createMediaItem(newItem);
+      if (onMediaAdded) onMediaAdded();
       onClose();
     } catch (error) {
       setError("Error creating media item.");

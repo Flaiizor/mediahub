@@ -6,9 +6,10 @@ interface MediaListProps {
   status: ExperienceStatus;
   title: string;
   emptyMessage?: string;
+  refreshKey?: number;
 }
 
-export default function MediaList({ status, title, emptyMessage }: MediaListProps) {
+export default function MediaList({ status, title, emptyMessage, refreshKey }: MediaListProps) {
   const [mediaItems, setMediaItems] = useState<MediaItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -25,7 +26,6 @@ export default function MediaList({ status, title, emptyMessage }: MediaListProp
 
   const currentYear = new Date().getFullYear();
 
-  // Fetch filtered items on mount and when filter is applied
   const fetchFiltered = async (
     filters: { status?: ExperienceStatus } = { status }
   ) => {
@@ -43,8 +43,7 @@ export default function MediaList({ status, title, emptyMessage }: MediaListProp
 
   useEffect(() => {
     fetchFiltered();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [status]);
+  }, [status, refreshKey]);
 
   const handleEditClick = (item: MediaItem) => {
     setEditingId(item.id);
@@ -105,7 +104,6 @@ export default function MediaList({ status, title, emptyMessage }: MediaListProp
     }
   };
 
-  // Filter form handlers
   const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFilterFields((prev) => ({
@@ -116,7 +114,6 @@ export default function MediaList({ status, title, emptyMessage }: MediaListProp
 
   const handleFilter = (e: React.FormEvent) => {
     e.preventDefault();
-    // Only include non-empty fields
     const filters: any = {};
     if (filterFields.title.trim()) filters.title = filterFields.title.trim();
     if (filterFields.type) filters.type = filterFields.type;

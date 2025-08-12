@@ -124,10 +124,6 @@ export default function MediaList({ status, title, emptyMessage, refreshKey }: M
     fetchFiltered(filters);
   };
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
-  if (mediaItems.length === 0) return <div>{emptyMessage || "No media to show."}</div>;
-
   return (
     <div>
       <h2>{title}</h2>
@@ -174,125 +170,124 @@ export default function MediaList({ status, title, emptyMessage, refreshKey }: M
           onChange={handleFilterChange}
           style={{ width: "70px" }}
         />
-        <select
-          name="status"
-          value={filterFields.status}
-          onChange={handleFilterChange}
-        >
-          <option value="TO_EXPERIENCE">To Experience</option>
-          <option value="IN_PROGRESS">In Progress</option>
-          <option value="COMPLETED">Completed</option>
-        </select>
         <button type="submit">Filter</button>
       </form>
-      <ul>
-        {mediaItems.map((item) => (
-          <li key={item.id}>
-            {editingId === item.id ? (
-              <form
-                style={{ marginTop: "0.5rem" }}
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  handleEditSubmit(item.id);
-                }}
-              >
-                <input
-                  name="title"
-                  type="text"
-                  placeholder="Title"
-                  value={editFields.title ?? ""}
-                  onChange={handleEditChange}
-                  required
-                  style={{ marginRight: "0.5rem" }}
-                />
-                <select
-                  name="type"
-                  value={editFields.type as MediaType}
-                  onChange={handleEditChange}
-                  required
-                  style={{ marginRight: "0.5rem" }}
+      {loading ? (
+        <div>Loading...</div>
+      ) : error ? (
+        <div>Error: {error}</div>
+      ) : mediaItems.length === 0 ? (
+        <div>{emptyMessage || "No media to show."}</div>
+      ) : (
+        <ul>
+          {mediaItems.map((item) => (
+            <li key={item.id}>
+              {editingId === item.id ? (
+                <form
+                  style={{ marginTop: "0.5rem" }}
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    handleEditSubmit(item.id);
+                  }}
                 >
-                  <option value="BOOK">Book</option>
-                  <option value="MOVIE">Movie</option>
-                  <option value="SHOW">Show</option>
-                  <option value="GAME">Game</option>
-                </select>
-                <input
-                  name="genre"
-                  type="text"
-                  placeholder="Genre"
-                  value={editFields.genre ?? ""}
-                  onChange={handleEditChange}
-                  required
-                  style={{ marginRight: "0.5rem" }}
-                />
-                <input
-                  name="releaseYear"
-                  type="number"
-                  min={1900}
-                  max={currentYear}
-                  placeholder="Release Year"
-                  value={editFields.releaseYear ?? ""}
-                  onChange={handleEditChange}
-                  style={{ width: "110px", marginRight: "0.5rem" }}
-                />
-                <input
-                  name="creator"
-                  type="text"
-                  placeholder="Creator"
-                  value={editFields.creator ?? ""}
-                  onChange={handleEditChange}
-                  style={{ marginRight: "0.5rem" }}
-                />
-                <select
-                  name="status"
-                  value={editFields.status as ExperienceStatus}
-                  onChange={handleEditChange}
-                  style={{ marginRight: "0.5rem" }}
-                >
-                  <option value="TO_EXPERIENCE">To Experience</option>
-                  <option value="IN_PROGRESS">In Progress</option>
-                  <option value="COMPLETED">Completed</option>
-                </select>
-                <input
-                  name="rating"
-                  type="number"
-                  min={1}
-                  max={10}
-                  placeholder="Rating"
-                  value={editFields.rating ?? ""}
-                  onChange={handleEditChange}
-                  style={{ width: "60px", marginRight: "0.5rem" }}
-                />
-                <input
-                  name="review"
-                  type="text"
-                  placeholder="Review"
-                  value={editFields.review ?? ""}
-                  onChange={handleEditChange}
-                  style={{ marginRight: "0.5rem" }}
-                />
-                <button type="submit" style={{ marginRight: "0.5rem" }}>Save</button>
-                <button type="button" onClick={() => setEditingId(null)} style={{ marginRight: "0.5rem" }}>Cancel</button>
-                <button type="button" onClick={() => handleDelete(item.id)} style={{ color: "red" }}>Delete</button>
-              </form>
-            ) : (
-              <>
-                <strong>{item.title}</strong> ({item.type}) - {item.genre} {item.releaseYear && `- ${item.releaseYear}`}
-                <div>
-                  Creator: {item.creator ?? "-"}, Status: {item.status}, Rating: {item.rating ?? "-"}, Review: {item.review ?? "-"}
-                  <button style={{ marginLeft: "1rem" }} onClick={() => handleEditClick(item)}>
-                    Edit
-                  </button>
-                  <button style={{ marginLeft: "0.5rem", color: "red" }} onClick={() => handleDelete(item.id)}>
-                    Delete
-                  </button>
-                </div>
-              </>
-            )}
-          </li>
-        ))}
-      </ul>
+                  <input
+                    name="title"
+                    type="text"
+                    placeholder="Title"
+                    value={editFields.title ?? ""}
+                    onChange={handleEditChange}
+                    required
+                    style={{ marginRight: "0.5rem" }}
+                  />
+                  <select
+                    name="type"
+                    value={editFields.type as MediaType}
+                    onChange={handleEditChange}
+                    required
+                    style={{ marginRight: "0.5rem" }}
+                  >
+                    <option value="BOOK">Book</option>
+                    <option value="MOVIE">Movie</option>
+                    <option value="SHOW">Show</option>
+                    <option value="GAME">Game</option>
+                  </select>
+                  <input
+                    name="genre"
+                    type="text"
+                    placeholder="Genre"
+                    value={editFields.genre ?? ""}
+                    onChange={handleEditChange}
+                    required
+                    style={{ marginRight: "0.5rem" }}
+                  />
+                  <input
+                    name="releaseYear"
+                    type="number"
+                    min={1900}
+                    max={currentYear}
+                    placeholder="Release Year"
+                    value={editFields.releaseYear ?? ""}
+                    onChange={handleEditChange}
+                    style={{ width: "110px", marginRight: "0.5rem" }}
+                  />
+                  <input
+                    name="creator"
+                    type="text"
+                    placeholder="Creator"
+                    value={editFields.creator ?? ""}
+                    onChange={handleEditChange}
+                    style={{ marginRight: "0.5rem" }}
+                  />
+                  <select
+                    name="status"
+                    value={editFields.status as ExperienceStatus}
+                    onChange={handleEditChange}
+                    style={{ marginRight: "0.5rem" }}
+                  >
+                    <option value="TO_EXPERIENCE">To Experience</option>
+                    <option value="IN_PROGRESS">In Progress</option>
+                    <option value="COMPLETED">Completed</option>
+                  </select>
+                  <input
+                    name="rating"
+                    type="number"
+                    min={1}
+                    max={10}
+                    placeholder="Rating"
+                    value={editFields.rating ?? ""}
+                    onChange={handleEditChange}
+                    style={{ width: "60px", marginRight: "0.5rem" }}
+                  />
+                  <input
+                    name="review"
+                    type="text"
+                    placeholder="Review"
+                    value={editFields.review ?? ""}
+                    onChange={handleEditChange}
+                    style={{ marginRight: "0.5rem" }}
+                  />
+                  <button type="submit" style={{ marginRight: "0.5rem" }}>Save</button>
+                  <button type="button" onClick={() => setEditingId(null)} style={{ marginRight: "0.5rem" }}>Cancel</button>
+                  <button type="button" onClick={() => handleDelete(item.id)} style={{ color: "red" }}>Delete</button>
+                </form>
+              ) : (
+                <>
+                  <strong>{item.title}</strong> ({item.type}) - {item.genre} {item.releaseYear && `- ${item.releaseYear}`}
+                  <div>
+                    Creator: {item.creator ?? "-"}, Status: {item.status}, Rating: {item.rating ?? "-"}, Review: {item.review ?? "-"}
+                    <button style={{ marginLeft: "1rem" }} onClick={() => handleEditClick(item)}>
+                      Edit
+                    </button>
+                    <button style={{ marginLeft: "0.5rem", color: "red" }} onClick={() => handleDelete(item.id)}>
+                      Delete
+                    </button>
+                  </div>
+                </>
+              )}
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }

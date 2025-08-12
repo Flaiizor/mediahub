@@ -38,10 +38,6 @@ public class MediaItemService {
         return mediaItemRepository.findById(id);
     }
 
-    public boolean existsByTitle(String title) {
-        return mediaItemRepository.existsByTitleIgnoreCase(title);
-    }
-
     public Optional<MediaItem> updateMediaItem(Long id, MediaItemRequest request) {
         return mediaItemRepository.findById(id).map(existingItem -> {
             mediaItemMapper.updateEntity(existingItem, request);
@@ -57,23 +53,8 @@ public class MediaItemService {
         return false;
     }
 
-    public List<MediaItem> getMediaItemsByType(MediaType type) {
-        return mediaItemRepository.findByType(type);
-    }
-
-    public List<MediaItem> getMediaItemsByStatus(ExperienceStatus status) {
-        return mediaItemRepository.findByStatus(status);
-    }
-
-    public List<MediaItem> getMediaItemsByTypeAndStatus(MediaType type, ExperienceStatus status) {
-        return mediaItemRepository.findByTypeAndStatus(type, status);
-    }
-
-    public List<MediaItem> searchMediaItemsByTitle(String keyword) {
-        return mediaItemRepository.findByTitleContainingIgnoreCase(keyword);
-    }
-
-    public List<MediaItem> searchMediaItemsByCreator(String creator) {
-        return mediaItemRepository.findByCreatorContainingIgnoreCase(creator);
+    public List<MediaItem> filterMediaItems(String title, MediaType type, String genre,
+                                            String creator, Integer rating, ExperienceStatus status) {
+        return mediaItemRepository.filterMediaItems(title, type, genre, creator, rating, status);
     }
 }

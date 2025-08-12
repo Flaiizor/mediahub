@@ -28,6 +28,10 @@ public class MediaItemRequest {
 
     private ExperienceStatus status;
 
+    @Min(value = 1, message = "Rating must be at least 1 star")
+    @Max(value = 10, message = "Highest rating is 10 stars")
+    private int rating;
+
     @Size(max = 2000, message = "Review is too long")
     private String review;
 }

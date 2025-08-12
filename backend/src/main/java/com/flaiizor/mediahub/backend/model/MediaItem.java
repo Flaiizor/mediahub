@@ -28,6 +28,8 @@ public class MediaItem {
     @Enumerated(EnumType.STRING)
     private ExperienceStatus status;
 
+    private int rating;
+
     @Column(length = 2000)
     private String review;
 }

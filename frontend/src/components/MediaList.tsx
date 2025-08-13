@@ -124,21 +124,26 @@ export default function MediaList({ status, title, emptyMessage, refreshKey }: M
     fetchFiltered(filters);
   };
 
-  return (
+    return (
     <div>
-      <h2>{title}</h2>
-      <form onSubmit={handleFilter} style={{ marginBottom: "1rem", display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
+      <h2 className="text-2xl font-bold text-fuchsia-800 mb-4">{title}</h2>
+      <form
+        onSubmit={handleFilter}
+        className="flex flex-wrap gap-2 mb-6 bg-fuchsia-50 p-4 rounded-lg shadow"
+      >
         <input
           name="title"
           type="text"
           placeholder="Title"
           value={filterFields.title}
           onChange={handleFilterChange}
+          className="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-fuchsia-400"
         />
         <select
           name="type"
           value={filterFields.type}
           onChange={handleFilterChange}
+          className="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-fuchsia-400"
         >
           <option value="">All Types</option>
           <option value="BOOK">Book</option>
@@ -152,6 +157,7 @@ export default function MediaList({ status, title, emptyMessage, refreshKey }: M
           placeholder="Genre"
           value={filterFields.genre}
           onChange={handleFilterChange}
+          className="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-fuchsia-400"
         />
         <input
           name="creator"
@@ -159,6 +165,7 @@ export default function MediaList({ status, title, emptyMessage, refreshKey }: M
           placeholder="Creator"
           value={filterFields.creator}
           onChange={handleFilterChange}
+          className="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-fuchsia-400"
         />
         <input
           name="rating"
@@ -168,125 +175,170 @@ export default function MediaList({ status, title, emptyMessage, refreshKey }: M
           placeholder="Rating"
           value={filterFields.rating}
           onChange={handleFilterChange}
-          style={{ width: "70px" }}
+          className="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-fuchsia-400 w-20"
         />
-        <button type="submit">Filter</button>
+        <button
+          type="submit"
+          className="px-4 py-2 bg-fuchsia-800 text-white hover:bg-fuchsia-600 rounded-lg transition-colors font-medium"
+        >
+          Filter
+        </button>
       </form>
       {loading ? (
-        <div>Loading...</div>
+        <div className="text-gray-500">Loading...</div>
       ) : error ? (
-        <div>Error: {error}</div>
-      ) : mediaItems.length === 0 ? (
-        <div>{emptyMessage || "No media to show."}</div>
+        <div className="text-red-600">{error}</div>
       ) : (
-        <ul>
-          {mediaItems.map((item) => (
-            <li key={item.id}>
-              {editingId === item.id ? (
-                <form
-                  style={{ marginTop: "0.5rem" }}
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    handleEditSubmit(item.id);
-                  }}
+        <>
+          {mediaItems.length === 0 ? (
+            <div className="text-gray-500">{emptyMessage || "No media to show."}</div>
+          ) : (
+            <ul className="space-y-4">
+              {mediaItems.map((item) => (
+                <li
+                  key={item.id}
+                  className="bg-white rounded-lg shadow p-4 flex flex-col gap-2"
                 >
-                  <input
-                    name="title"
-                    type="text"
-                    placeholder="Title"
-                    value={editFields.title ?? ""}
-                    onChange={handleEditChange}
-                    required
-                    style={{ marginRight: "0.5rem" }}
-                  />
-                  <select
-                    name="type"
-                    value={editFields.type as MediaType}
-                    onChange={handleEditChange}
-                    required
-                    style={{ marginRight: "0.5rem" }}
-                  >
-                    <option value="BOOK">Book</option>
-                    <option value="MOVIE">Movie</option>
-                    <option value="SHOW">Show</option>
-                    <option value="GAME">Game</option>
-                  </select>
-                  <input
-                    name="genre"
-                    type="text"
-                    placeholder="Genre"
-                    value={editFields.genre ?? ""}
-                    onChange={handleEditChange}
-                    required
-                    style={{ marginRight: "0.5rem" }}
-                  />
-                  <input
-                    name="releaseYear"
-                    type="number"
-                    min={1900}
-                    max={currentYear}
-                    placeholder="Release Year"
-                    value={editFields.releaseYear ?? ""}
-                    onChange={handleEditChange}
-                    style={{ width: "110px", marginRight: "0.5rem" }}
-                  />
-                  <input
-                    name="creator"
-                    type="text"
-                    placeholder="Creator"
-                    value={editFields.creator ?? ""}
-                    onChange={handleEditChange}
-                    style={{ marginRight: "0.5rem" }}
-                  />
-                  <select
-                    name="status"
-                    value={editFields.status as ExperienceStatus}
-                    onChange={handleEditChange}
-                    style={{ marginRight: "0.5rem" }}
-                  >
-                    <option value="TO_EXPERIENCE">To Experience</option>
-                    <option value="IN_PROGRESS">In Progress</option>
-                    <option value="COMPLETED">Completed</option>
-                  </select>
-                  <input
-                    name="rating"
-                    type="number"
-                    min={1}
-                    max={10}
-                    placeholder="Rating"
-                    value={editFields.rating ?? ""}
-                    onChange={handleEditChange}
-                    style={{ width: "60px", marginRight: "0.5rem" }}
-                  />
-                  <input
-                    name="review"
-                    type="text"
-                    placeholder="Review"
-                    value={editFields.review ?? ""}
-                    onChange={handleEditChange}
-                    style={{ marginRight: "0.5rem" }}
-                  />
-                  <button type="submit" style={{ marginRight: "0.5rem" }}>Save</button>
-                  <button type="button" onClick={() => setEditingId(null)} style={{ marginRight: "0.5rem" }}>Cancel</button>
-                  <button type="button" onClick={() => handleDelete(item.id)} style={{ color: "red" }}>Delete</button>
-                </form>
-              ) : (
-                <>
-                  <strong>{item.title}</strong> ({item.type}) - {item.genre} {item.releaseYear && `- ${item.releaseYear}`}
-                  <div>
-                    Creator: {item.creator ?? "-"}, Status: {item.status}, Rating: {item.rating ?? "-"}, Review: {item.review ?? "-"}
-                    <button style={{ marginLeft: "1rem" }} onClick={() => handleEditClick(item)}>
-                      Edit
-                    </button>
-                    <button style={{ marginLeft: "0.5rem", color: "red" }} onClick={() => handleDelete(item.id)}>
-                      Delete
-                    </button>
-                  </div>
-                </>
-              )}
-            </li>
-          ))}
-        </ul>
+                  {editingId === item.id ? (
+                    <form
+                      className="flex flex-wrap gap-2 items-center"
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        handleEditSubmit(item.id);
+                      }}
+                    >
+                      <input
+                        name="title"
+                        type="text"
+                        placeholder="Title"
+                        value={editFields.title ?? ""}
+                        onChange={handleEditChange}
+                        required
+                        className="border rounded-lg px-2 py-1 focus:outline-none focus:ring-2 focus:ring-fuchsia-400"
+                      />
+                      <select
+                        name="type"
+                        value={editFields.type as MediaType}
+                        onChange={handleEditChange}
+                        required
+                        className="border rounded-lg px-2 py-1 focus:outline-none focus:ring-2 focus:ring-fuchsia-400"
+                      >
+                        <option value="BOOK">Book</option>
+                        <option value="MOVIE">Movie</option>
+                        <option value="SHOW">Show</option>
+                        <option value="GAME">Game</option>
+                      </select>
+                      <input
+                        name="genre"
+                        type="text"
+                        placeholder="Genre"
+                        value={editFields.genre ?? ""}
+                        onChange={handleEditChange}
+                        required
+                        className="border rounded-lg px-2 py-1 focus:outline-none focus:ring-2 focus:ring-fuchsia-400"
+                      />
+                      <input
+                        name="releaseYear"
+                        type="number"
+                        min={1900}
+                        max={currentYear}
+                        placeholder="Release Year"
+                        value={editFields.releaseYear ?? ""}
+                        onChange={handleEditChange}
+                        className="border rounded-lg px-2 py-1 focus:outline-none focus:ring-2 focus:ring-fuchsia-400 w-24"
+                      />
+                      <input
+                        name="creator"
+                        type="text"
+                        placeholder="Creator"
+                        value={editFields.creator ?? ""}
+                        onChange={handleEditChange}
+                        className="border rounded-lg px-2 py-1 focus:outline-none focus:ring-2 focus:ring-fuchsia-400"
+                      />
+                      <select
+                        name="status"
+                        value={editFields.status as ExperienceStatus}
+                        onChange={handleEditChange}
+                        className="border rounded-lg px-2 py-1 focus:outline-none focus:ring-2 focus:ring-fuchsia-400"
+                      >
+                        <option value="TO_EXPERIENCE">To Experience</option>
+                        <option value="IN_PROGRESS">In Progress</option>
+                        <option value="COMPLETED">Completed</option>
+                      </select>
+                      <input
+                        name="rating"
+                        type="number"
+                        min={1}
+                        max={10}
+                        placeholder="Rating"
+                        value={editFields.rating ?? ""}
+                        onChange={handleEditChange}
+                        className="border rounded-lg px-2 py-1 focus:outline-none focus:ring-2 focus:ring-fuchsia-400 w-16"
+                      />
+                      <input
+                        name="review"
+                        type="text"
+                        placeholder="Review"
+                        value={editFields.review ?? ""}
+                        onChange={handleEditChange}
+                        className="border rounded-lg px-2 py-1 focus:outline-none focus:ring-2 focus:ring-fuchsia-400"
+                      />
+                      <button
+                        type="submit"
+                        className="px-3 py-1 bg-fuchsia-800 text-white hover:bg-fuchsia-600 rounded-lg transition-colors font-medium"
+                      >
+                        Save
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setEditingId(null)}
+                        className="px-3 py-1 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg transition-colors font-medium"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleDelete(item.id)}
+                        className="px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors font-medium"
+                      >
+                        Delete
+                      </button>
+                    </form>
+                  ) : (
+                    <>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="font-semibold text-fuchsia-900">{item.title}</span>
+                        <span className="text-xs bg-fuchsia-100 text-fuchsia-800 px-2 py-1 rounded">{item.type}</span>
+                        <span className="text-gray-500">{item.genre}</span>
+                        {item.releaseYear && (
+                          <span className="text-gray-400">- {item.releaseYear}</span>
+                        )}
+                      </div>
+                      <div className="flex flex-wrap items-center gap-2 text-sm">
+                        <span>Creator: <span className="font-medium">{item.creator ?? "-"}</span></span>
+                        <span>Status: <span className="font-medium">{item.status}</span></span>
+                        <span>Rating: <span className="font-medium">{item.rating ?? "-"}</span></span>
+                        <span>Review: <span className="font-medium">{item.review ?? "-"}</span></span>
+                        <button
+                          className="ml-auto px-3 py-1 bg-fuchsia-800 text-white hover:bg-fuchsia-600 rounded-lg transition-colors font-medium"
+                          onClick={() => handleEditClick(item)}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          className="px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors font-medium"
+                          onClick={() => handleDelete(item.id)}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </>
+                  )}
+                </li>
+              ))}
+            </ul>
+          )}
+        </>
       )}
     </div>
   );

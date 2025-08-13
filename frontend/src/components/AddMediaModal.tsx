@@ -70,19 +70,27 @@ export default function AddMediaModal({ isOpen, onClose, onMediaAdded }: AddMedi
   };
 
   return (
-    <div style={overlayStyles}>
-      <div style={modalStyles}>
-        <h2>Add New Media</h2>
-        <form onSubmit={handleSubmit}>
-          {error && <div style={{ color: "red", marginBottom: "0.5rem" }}>{error}</div>}
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+      <div className="bg-white rounded-xl shadow-lg w-full max-w-xs p-6">
+        <h2 className="text-xl font-bold mb-4 text-fuchsia-800">Add New Media</h2>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+          {error && (
+            <div className="text-red-600 text-sm mb-2">{error}</div>
+          )}
           <input
             type="text"
             placeholder="Title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             required
+            className="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-fuchsia-400"
           />
-          <select value={type} onChange={(e) => setType(e.target.value as MediaType)} required>
+          <select
+            value={type}
+            onChange={(e) => setType(e.target.value as MediaType)}
+            required
+            className="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-fuchsia-400"
+          >
             <option value="BOOK">Book</option>
             <option value="MOVIE">Movie</option>
             <option value="SHOW">Show</option>
@@ -94,6 +102,7 @@ export default function AddMediaModal({ isOpen, onClose, onMediaAdded }: AddMedi
             value={genre}
             onChange={(e) => setGenre(e.target.value)}
             required
+            className="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-fuchsia-400"
           />
           <input
             type="number"
@@ -104,14 +113,20 @@ export default function AddMediaModal({ isOpen, onClose, onMediaAdded }: AddMedi
             onChange={(e) =>
               setReleaseYear(e.target.value ? Number(e.target.value) : undefined)
             }
+            className="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-fuchsia-400"
           />
           <input
             type="text"
             placeholder="Creator"
             value={creator}
             onChange={(e) => setCreator(e.target.value)}
+            className="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-fuchsia-400"
           />
-          <select value={status} onChange={(e) => setStatus(e.target.value as ExperienceStatus)}>
+          <select
+            value={status}
+            onChange={(e) => setStatus(e.target.value as ExperienceStatus)}
+            className="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-fuchsia-400"
+          >
             <option value="TO_EXPERIENCE">To Experience</option>
             <option value="IN_PROGRESS">In Progress</option>
             <option value="COMPLETED">Completed</option>
@@ -125,35 +140,33 @@ export default function AddMediaModal({ isOpen, onClose, onMediaAdded }: AddMedi
             onChange={(e) =>
               setRating(e.target.value ? Number(e.target.value) : undefined)
             }
+            className="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-fuchsia-400"
           />
           <input
             type="text"
             placeholder="Review (optional)"
             value={review ?? ""}
             onChange={(e) => setReview(e.target.value)}
+            className="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-fuchsia-400"
           />
-          <button type="submit" disabled={loading}>
-            {loading ? "Adding..." : "Add Media"}
-          </button>
-          <button type="button" onClick={onClose}>Cancel</button>
+          <div className="flex gap-2 mt-2">
+            <button
+              type="submit"
+              disabled={loading}
+              className="flex-1 bg-fuchsia-800 hover:bg-fuchsia-600 text-white font-semibold py-2 rounded-lg transition-colors disabled:opacity-60"
+            >
+              {loading ? "Adding..." : "Add Media"}
+            </button>
+            <button
+              type="button"
+              onClick={onClose}
+              className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 rounded-lg transition-colors"
+            >
+              Cancel
+            </button>
+          </div>
         </form>
       </div>
     </div>
   );
 }
-
-const overlayStyles: React.CSSProperties = {
-  position: "fixed",
-  inset: 0,
-  background: "rgba(0, 0, 0, 0.5)",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-};
-
-const modalStyles: React.CSSProperties = {
-  background: "#fff",
-  padding: "2rem",
-  borderRadius: "8px",
-  width: "300px",
-};
